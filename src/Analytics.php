@@ -574,7 +574,7 @@ class Analytics
      * @return AnalyticsResponseInterface
      * @throws Exception\InvalidPayloadDataException
      */
-    protected function sendHit($methodName)
+    protected function sendHit($methodName, array $arguments = [])
     {
         $hitType = strtoupper(substr($methodName, 4));
 
@@ -593,7 +593,11 @@ class Analytics
             return new NullAnalyticsResponse();
         }
 
-        return $this->getHttpClient()->post($this->getUrl(), $this->getHttpClientOptions());
+        if(array_key_exists(0,$arguments)){
+            $url = $this->getUrl();
+            $arguments[0]->addInfo($url);
+        }
+        return $this->getHttpClient()->post($url, $this->getHttpClientOptions());
     }
 
     /**
@@ -883,7 +887,7 @@ class Analytics
         }
 
         if (preg_match('/^(send)(\w+)/', $methodName, $matches)) {
-            return $this->sendHit($methodName);
+            return $this->sendHit($methodName, $methodArguments);
         }
 
         // Get Parameters
