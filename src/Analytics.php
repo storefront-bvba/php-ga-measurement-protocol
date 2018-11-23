@@ -593,8 +593,8 @@ class Analytics
             return new NullAnalyticsResponse();
         }
 
+        $url = $this->getUrl();
         if(array_key_exists(0,$arguments)){
-            $url = $this->getUrl();
             $arguments[0]->addInfo($url);
         }
         return $this->getHttpClient()->post($url, $this->getHttpClientOptions());
